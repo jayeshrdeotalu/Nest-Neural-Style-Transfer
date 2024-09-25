@@ -21,7 +21,7 @@ class MainWindow(QWidget):
 
         # Create a background label
         self.background_label = QLabel(self)
-        self.set_background_image(r"/home/om/Desktop/Nest-Neural-Style-Transfer/paris_generated_at_iteration_1900.png")  # image path
+        self.set_background_image(r"Data/Wallpaper_2.jpeg")  # image path
 
         # Create a button
         button = QPushButton("Click Me!", self)
