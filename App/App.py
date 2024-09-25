@@ -45,11 +45,11 @@ class MainWindow(QWidget):
         self.background_label.resize(self.size())
 
     def center_window(self):
-        # Get the screen geometry and the window geometry
+        # Getting the screen geometry and the window geometry
         screen = QApplication.primaryScreen()
         screen_geometry = screen.availableGeometry()
 
-        # Move the window to the center
+        # Moving to center
         window_geometry = self.frameGeometry()
         window_geometry.moveCenter(screen_geometry.center())
         self.move(window_geometry.topLeft())
@@ -57,14 +57,14 @@ class MainWindow(QWidget):
     def on_button_click(self):
         print("Button clicked!")
 
-# Initialize the application
+# Initialization of application
 app = QApplication(sys.argv)
 
-# Create the window
+# window
 window = MainWindow()
 window.show()
 
-# Run the application
+# Run application
 sys.exit(app.exec())
 
 
