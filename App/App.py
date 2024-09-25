@@ -15,6 +15,7 @@ from PyQt6.QtWidgets import (
     QApplication, QLabel, QPushButton, QVBoxLayout, QWidget, 
     QGraphicsOpacityEffect, QGraphicsBlurEffect
 )
+from PyQt6.QtWidgets import *
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -31,14 +32,11 @@ class MainWindow(QWidget):
         self.background_label = QLabel(self)
         self.set_background_image(r"Data/Wallpaper_2.jpeg")  # image path
 
-        # Create a button
-        button = QPushButton("Click Me!", self)
-        button.clicked.connect(self.on_button_click)
+        # Set main layout
+        self.main_layout = QVBoxLayout(self)
+        self.setLayout(self.main_layout)
 
-        # Set layout
-        layout = QVBoxLayout(self)
-        layout.addWidget(button)
-        self.setLayout(layout)
+        self.front_setup()
 
          # Start the welcome animation
         self.show_welcome_animation()
@@ -101,6 +99,79 @@ class MainWindow(QWidget):
 
     def on_button_click(self):
         print("Button clicked!")
+
+    def front_setup(self):
+        # Add a label at the top
+        title_label = QLabel("Please choose a method to perform styling", self)
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title_label.setStyleSheet("font-size: 24px; color: black;")
+        self.main_layout.addWidget(title_label) 
+
+         # Create the two clickable boxes
+        self.create_styling_boxes(self.main_layout)
+
+    def create_styling_boxes(self, parent_layout):
+        # Create a horizontal layout for the two boxes
+        box_layout = QHBoxLayout()
+
+        # Styling for the boxes
+        box_style = """
+        QPushButton {
+            background-color: #3498db;
+            color: white;
+            font-size: 18px;
+            border-radius: 20px;
+            padding: 40px;
+            border: 2px solid #2980b9;
+        }
+        QPushButton:hover {
+            background-color: #2980b9;
+        }
+        QLabel {
+            font-size: 14px;
+            color: black;
+        }
+        """
+         # Create the first box for image styling
+        image_box = QPushButton("", self)
+        image_box.setStyleSheet(box_style)
+        image_box.clicked.connect(self.on_image_styling_click)  # Connect to a function
+
+        # Create a label for image styling
+        image_label = QLabel("Image Styling", self)
+        image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Create a vertical layout for image box + label
+        image_layout = QVBoxLayout()
+        image_layout.addWidget(image_box)
+        image_layout.addWidget(image_label)
+
+        # Create the second box for video styling
+        video_box = QPushButton("", self)
+        video_box.setStyleSheet(box_style)
+        video_box.clicked.connect(self.on_video_styling_click)  # Connect to a function
+
+        # Create a label for video styling
+        video_label = QLabel("Video Styling", self)
+        video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Create a vertical layout for video box + label
+        video_layout = QVBoxLayout()
+        video_layout.addWidget(video_box)
+        video_layout.addWidget(video_label)
+
+        # Add the layouts to the horizontal layout
+        box_layout.addLayout(image_layout)
+        box_layout.addLayout(video_layout)
+
+        # Add the box layout to the parent layout
+        self.main_layout.addLayout(box_layout)
+
+    def on_image_styling_click(self):
+            print("Image Styling clicked!")
+
+    def on_video_styling_click(self):
+        print("Video Styling clicked!")
 
 # Initialization of application
 app = QApplication(sys.argv)
