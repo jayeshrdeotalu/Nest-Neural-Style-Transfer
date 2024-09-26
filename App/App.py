@@ -35,8 +35,9 @@ class MainWindow(QWidget):
         # Set main layout
         self.main_layout = QVBoxLayout(self)
         self.setLayout(self.main_layout)
-
+        self.main_layout.addStretch(2)
         self.front_setup()
+        self.main_layout.addStretch(3)
 
          # Start the welcome animation
         self.show_welcome_animation()
@@ -106,9 +107,10 @@ class MainWindow(QWidget):
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setStyleSheet("font-size: 24px; color: black; background-color: #f0f0f0; padding: 10px; border-radius: 10px;")
         # title_label.setStyleSheet("font-size: 24px; color: black;")
-        title_label.setFixedWidth(700)  # Fixed width for the label
+        # title_label.setFixedWidth(700)  # Fixed width for the label
         title_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        self.main_layout.addWidget(title_label, alignment=Qt.AlignmentFlag.AlignCenter) 
+        self.main_layout.addWidget(title_label, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.main_layout.addStretch(1) 
 
          # Create the two clickable boxes
         self.create_styling_boxes(self.main_layout)
@@ -126,10 +128,10 @@ class MainWindow(QWidget):
             border-radius: 20px;
             padding: 40px;
             border: 2px solid #2980b9;
-            min-width: 150px;
-            max-width: 300px;
-            min-height: 150px;
-            max-height: 350px;
+            min-width: 100px;
+            max-width: 200px;
+            min-height: 120px;
+            max-height: 220px;
             text-align: center;
         }
         QPushButton:hover {
