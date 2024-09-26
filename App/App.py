@@ -75,7 +75,7 @@ class MainWindow(QWidget):
         # Create the welcome message label
         self.welcome_label = QLabel("Welcome to NEST", self)
         self.welcome_label.setStyleSheet(
-            "QLabel { font-size: 30px; color: black; background-color: white; border-radius: 15px; padding: 20px; }"
+            "QLabel { font-size: 30px; color: black; background-color: white; border-radius: 15px; padding: 20px;}"
         )
         self.welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.welcome_label.resize(300, 100)
@@ -85,8 +85,10 @@ class MainWindow(QWidget):
         self.blur_effect = QGraphicsBlurEffect()
         self.background_label.setGraphicsEffect(self.blur_effect)
 
+        self.welcome_label.raise_()
+
         # Set up a timer to fade out the welcome label
-        QTimer.singleShot(600, self.fade_out_welcome_message)
+        QTimer.singleShot(1500, self.fade_out_welcome_message)  # Increased to 1.5 seconds
 
     def fade_out_welcome_message(self):
         # Create a fade-out animation for the welcome label
@@ -140,7 +142,6 @@ class MainWindow(QWidget):
             min-height : 120px;
             max-height : 220px;
         }
-
         """
 
         # Create the first label for image styling (GIF)
@@ -158,29 +159,26 @@ class MainWindow(QWidget):
         # Create a label below for "Image Styling"
         image_label = QLabel("Image Styling", self)
         image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        image_label.setStyleSheet("background-color: gray;border-radius: 10px;")
 
         # Create a vertical layout to stack the image animation and its label
         image_layout = QVBoxLayout()
         image_layout.addWidget(image_animation)
         image_layout.addWidget(image_label)
 
-        # Create the second label for video styling (video widget)
+        image_layout.setSpacing(20)  # Space between image and label
+
+         # Create the first label for image styling (GIF)
         video_animation = QLabel(self)
         video_animation.setStyleSheet(animation_style)
         video_animation.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        v_movie = QMovie("Data/test_video_annimation_2.gif")  # Replace with actual GIF file path
+        video_animation.setMovie(v_movie)
+        video_animation.setScaledContents(True)  # Scale the GIF to fit the label
+        v_movie.start()
 
-        # Create video playback widget inside the video animation label
-        video_widget = QVideoWidget(video_animation)
-        video_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        video_widget.setMinimumSize(300, 200)  # Set a minimum size for the video
-
-        media_player = QMediaPlayer(self)
-        audio_output = QAudioOutput(self)
-        media_player.setAudioOutput(audio_output)
-        media_player.setSource(QUrl.fromLocalFile(r"Data/test_video_styling_animation.mp4"))  # Replace with actual video file path
-        media_player.setLoops(QMediaPlayer.Loops.Infinite)  # Loop the video
-        media_player.setVideoOutput(video_widget)
-        media_player.play()
+        # Add click event to image styling animation
+        video_animation.mousePressEvent = self.on_image_styling_click
 
         # Add click event to video styling animation
         video_animation.mousePressEvent = self.on_video_styling_click
@@ -188,11 +186,14 @@ class MainWindow(QWidget):
         # Create a label below for "Video Styling"
         video_label = QLabel("Video Styling", self)
         video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        video_label.setStyleSheet("background-color: gray;border-radius: 10px;")
 
         # Create a vertical layout to stack the video animation and its label
         video_layout = QVBoxLayout()
         video_layout.addWidget(video_animation)
         video_layout.addWidget(video_label)
+
+        video_layout.setSpacing(20)
 
         # Add both layouts (image and video) to the horizontal layout
         animation_layout.addLayout(image_layout)
