@@ -114,7 +114,19 @@ class MainWindow(QWidget):
         # Add a label at the top
         title_label = QLabel("Please choose a method to perform styling", self)
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        title_label.setStyleSheet("font-size: 24px; color: black; background-color: #f0f0f0; padding: 10px; border-radius: 10px;")
+        # title_label.setStyleSheet("font-size: 24px; color: black; background-color: #f0f0f0; padding: 10px; border-radius: 10px;")
+        
+        title_label.setStyleSheet("""
+            QLabel {
+                font-size: 24px;
+                color: black;
+                background-color : gray;
+                background-position: center;  /* Center the background image */
+                background-repeat: no-repeat;  /* Prevent tiling */
+                padding: 10px;
+                border-radius: 10px;
+            }
+        """)
         # title_label.setStyleSheet("font-size: 24px; color: black;")
         # title_label.setFixedWidth(700)  # Fixed width for the label
         title_label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
