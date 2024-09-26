@@ -124,23 +124,10 @@ class MainWindow(QWidget):
 
     def create_styling_boxes(self, parent_layout):
         # Create a horizontal layout for the two boxes
-        box_layout = QHBoxLayout()
+        animation_layout = QHBoxLayout()
 
         # Styling for the boxes and text inside
-        box_style = """
-        QPushButton {
-            background-color: #3498db;
-            color: white;
-            font-size: 18px;
-            border-radius: 20px;
-            padding: 40px;
-            border: 2px solid #2980b9;
-            min-width: 100px;
-            max-width: 200px;
-            min-height: 120px;
-            max-height: 220px;
-            text-align: center;
-        }
+        animation_style = """
         QPushButton:hover {
             background-color: #2980b9;
         }
@@ -148,60 +135,76 @@ class MainWindow(QWidget):
         QLabel {
             border: none;
             background-color: transparent;
+            min-width : 150px;
+            max-width : 250px;
+            min-height : 120px;
+            max-height : 220px;
         }
+
         """
 
-        # Create the first box for image styling
-        image_box = QPushButton("Image Styling", self)
-        image_box.setStyleSheet(box_style)
-        image_box.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        image_box.clicked.connect(self.on_image_styling_click)
-
-        # Add image animation inside the box
-        image_animation = QLabel(image_box)
-        image_animation.setStyleSheet("border-radius: 20px; overflow: hidden;")
-        movie = QMovie("Data/image_styling_animatin.gif")  # path to the gif 
+        # Create the first label for image styling (GIF)
+        image_animation = QLabel(self)
+        image_animation.setStyleSheet(animation_style)
+        image_animation.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        movie = QMovie("Data/image_styling_animation_2.gif")  # Replace with actual GIF file path
         image_animation.setMovie(movie)
-        image_animation.setScaledContents(True)
+        image_animation.setScaledContents(True)  # Scale the GIF to fit the label
         movie.start()
 
-        image_layout = QVBoxLayout(image_box)
+        # Add click event to image styling animation
+        image_animation.mousePressEvent = self.on_image_styling_click
+
+        # Create a label below for "Image Styling"
+        image_label = QLabel("Image Styling", self)
+        image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Create a vertical layout to stack the image animation and its label
+        image_layout = QVBoxLayout()
         image_layout.addWidget(image_animation)
+        image_layout.addWidget(image_label)
 
-        # Create the second box for video styling
-        video_box = QPushButton("Video Styling", self)
-        video_box.setStyleSheet(box_style)
-        video_box.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        video_box.clicked.connect(self.on_video_styling_click)
+        # Create the second label for video styling (video widget)
+        video_animation = QLabel(self)
+        video_animation.setStyleSheet(animation_style)
+        video_animation.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        # Add video playback inside the box
-        video_widget = QVideoWidget(video_box)
-        video_widget.setStyleSheet("border-radius: 20px; overflow: hidden;")
+        # Create video playback widget inside the video animation label
+        video_widget = QVideoWidget(video_animation)
+        video_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        video_widget.setMinimumSize(300, 200)  # Set a minimum size for the video
+
         media_player = QMediaPlayer(self)
         audio_output = QAudioOutput(self)
         media_player.setAudioOutput(audio_output)
-        media_player.setSource(QUrl.fromLocalFile("Data/test_video_styling_animation.mp4"))  # Replace with actual video file path
-        media_player.setLoops(QMediaPlayer.Loops.Infinite)  # Play the video in loop
+        media_player.setSource(QUrl.fromLocalFile(r"Data/test_video_styling_animation.mp4"))  # Replace with actual video file path
+        media_player.setLoops(QMediaPlayer.Loops.Infinite)  # Loop the video
         media_player.setVideoOutput(video_widget)
         media_player.play()
 
-        video_layout = QVBoxLayout(video_box)
-        video_layout.addWidget(video_widget)
+        # Add click event to video styling animation
+        video_animation.mousePressEvent = self.on_video_styling_click
 
-        video_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        # Create a label below for "Video Styling"
+        video_label = QLabel("Video Styling", self)
+        video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        # Create a vertical layout to stack the video animation and its label
+        video_layout = QVBoxLayout()
+        video_layout.addWidget(video_animation)
+        video_layout.addWidget(video_label)
 
-        # Add the boxes to the horizontal layout
-        box_layout.addWidget(image_box)
-        box_layout.addWidget(video_box)
+        # Add both layouts (image and video) to the horizontal layout
+        animation_layout.addLayout(image_layout)
+        animation_layout.addLayout(video_layout)
 
-        # Add the box layout to the parent layout
-        parent_layout.addLayout(box_layout)
+        # Add the animation layout to the parent layout
+        parent_layout.addLayout(animation_layout)
 
-    def on_image_styling_click(self):
-            print("Image Styling clicked!")
+    def on_image_styling_click(self, event): # Event is just a extra parameter
+        print("Image Styling clicked!")
 
-    def on_video_styling_click(self):
+    def on_video_styling_click(self, event): # event just a extra parameter
         print("Video Styling clicked!")
 
 # Initialization of application
