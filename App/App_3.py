@@ -103,11 +103,11 @@ class MainWindow(QWidget):
 
     def on_image_styling_click(self, event):
         self.stacked_widget.setCurrentWidget(self.image_styling_page)
-        self.set_background_image("Data/image_styling_background.jpeg")  # Set background for image styling page
+        self.set_background_image("Data/Wallpaper_1.jpeg")  # Set background for image styling page
 
     def on_video_styling_click(self, event):
         self.stacked_widget.setCurrentWidget(self.video_styling_page)
-        self.set_background_image("Data/video_styling_background.jpeg")  # Set background for video styling page
+        self.set_background_image("Data/Wallpaper_3.jpeg")  # Set background for video styling page
 
     def create_styling_boxes(self, parent_layout):
         # Create a horizontal layout for image and video styling options
