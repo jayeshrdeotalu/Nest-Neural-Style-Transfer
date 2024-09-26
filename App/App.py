@@ -17,6 +17,13 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtWidgets import *
 
+# Importing movie functionalities 
+from PyQt6.QtGui import *
+from PyQt6.QtMultimedia import *
+from PyQt6.QtMultimediaWidgets import *
+
+from PyQt6.QtCore import QUrl
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -137,6 +144,11 @@ class MainWindow(QWidget):
         QPushButton:hover {
             background-color: #2980b9;
         }
+
+        QLabel {
+            border: none;
+            background-color: transparent;
+        }
         """
 
         # Create the first box for image styling
@@ -145,11 +157,39 @@ class MainWindow(QWidget):
         image_box.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         image_box.clicked.connect(self.on_image_styling_click)
 
+        # Add image animation inside the box
+        image_animation = QLabel(image_box)
+        image_animation.setStyleSheet("border-radius: 20px; overflow: hidden;")
+        movie = QMovie("Data/image_styling_animatin.gif")  # path to the gif 
+        image_animation.setMovie(movie)
+        image_animation.setScaledContents(True)
+        movie.start()
+
+        image_layout = QVBoxLayout(image_box)
+        image_layout.addWidget(image_animation)
+
         # Create the second box for video styling
         video_box = QPushButton("Video Styling", self)
         video_box.setStyleSheet(box_style)
         video_box.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         video_box.clicked.connect(self.on_video_styling_click)
+
+        # Add video playback inside the box
+        video_widget = QVideoWidget(video_box)
+        video_widget.setStyleSheet("border-radius: 20px; overflow: hidden;")
+        media_player = QMediaPlayer(self)
+        audio_output = QAudioOutput(self)
+        media_player.setAudioOutput(audio_output)
+        media_player.setSource(QUrl.fromLocalFile("Data/test_video_styling_animation.mp4"))  # Replace with actual video file path
+        media_player.setLoops(QMediaPlayer.Loops.Infinite)  # Play the video in loop
+        media_player.setVideoOutput(video_widget)
+        media_player.play()
+
+        video_layout = QVBoxLayout(video_box)
+        video_layout.addWidget(video_widget)
+
+        video_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
 
         # Add the boxes to the horizontal layout
         box_layout.addWidget(image_box)
