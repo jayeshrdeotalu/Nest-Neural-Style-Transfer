@@ -71,7 +71,8 @@ class MainWindow(QWidget):
         layout.addWidget(self.welcome_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Set up a timer to transition after the animation is done
-        QTimer.singleShot(1500, self.fade_out_welcome_message)  # Animation duration
+        #TODO : Make it 1500 at the time of deployment
+        QTimer.singleShot(2, self.fade_out_welcome_message)  # Animation duration
 
     def fade_out_welcome_message(self):
         # Create a fade-out animation for the welcome label
@@ -105,33 +106,44 @@ class MainWindow(QWidget):
                 border-radius: 10px;
             }
         """)
+
+        self.page1_layout.addStretch(1)
+
         self.page1_layout.addWidget(title_label, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        self.page1_layout.addStretch(1)
 
         # Create clickable boxes for image and video styling
         self.create_styling_boxes(self.page1_layout)
 
     def setup_image_styling_page(self):
-        # Set layout for image styling page
+        """Set layout for image styling page"""
+        
         layout = QVBoxLayout(self.image_styling_page)
+
+        back_button = QPushButton("<")
+        back_button.
+        back_button.clicked.connect(self.go_to_main_page)
+        layout.addWidget(back_button)
+
         label = QLabel("Image Styling Page", self.image_styling_page)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        back_button = QPushButton("Back to Main Menu")
+    def setup_video_styling_page(self):
+        """Set layout for video styling page"""
+        
+        layout = QVBoxLayout(self.video_styling_page)
+
+        back_button = QPushButton("<")
         back_button.clicked.connect(self.go_to_main_page)
         layout.addWidget(back_button)
-
-    def setup_video_styling_page(self):
-        # Set layout for video styling page
-        layout = QVBoxLayout(self.video_styling_page)
+        
         label = QLabel("Video Styling Page", self.video_styling_page)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        back_button = QPushButton("Back to Main Menu")
-        back_button.clicked.connect(self.go_to_main_page)
-        layout.addWidget(back_button)
-
+        
     def on_image_styling_click(self, event):
         self.stacked_widget.setCurrentWidget(self.image_styling_page)
         self.set_background_image("Data/image_styling_background.jpeg")  # Set background for image styling page
@@ -205,6 +217,7 @@ class MainWindow(QWidget):
 
         # Add animation layout to parent layout
         parent_layout.addLayout(animation_layout)
+        parent_layout.addStretch(2)
 
     def resizeEvent(self, event):
         # Ensure the background image resizes with the window

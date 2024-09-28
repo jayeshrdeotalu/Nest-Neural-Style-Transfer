@@ -202,6 +202,7 @@ class MainWindow(QWidget):
 
         # Add animation layout to parent layout
         parent_layout.addLayout(animation_layout)
+        parent_layout.addStrech(2)
 
     def resizeEvent(self, event):
         # Ensure the background image resizes with the window
