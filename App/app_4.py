@@ -63,11 +63,11 @@ class MainWindow(QWidget):
         # Create a label for the animation text
         self.welcome_label = QLabel("Welcome to NEST", self.animation_page)
         self.welcome_label.setStyleSheet(
-            "QLabel { font-size: 30px; color: purple; background-color: white; border-radius: 15px; padding: 20px;}"
+            "QLabel { font-size: 30px; color: black; background-color: white; border-radius: 15px; padding: 20px;}"
         )
         self.welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.welcome_label.resize(300, 100)
-        layout.addWidget(self.welcome_labimport sysel, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.welcome_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Set up a timer to transition after the animation is done
         QTimer.singleShot(1500, self.fade_out_welcome_message)  # Animation duration
