@@ -22,6 +22,11 @@ class MainWindow(QWidget):
         self.image_styling_page = QWidget()
         self.video_styling_page = QWidget()
 
+        # Initialize the background label to handle background images
+        self.background_label = QLabel(self)
+        self.background_label.setScaledContents(True)  # Ensure the background image scales
+        self.background_label.lower()  # Move background to behind the stacked widget
+
         self.setup_animation_page()  # Setup the animation page
         self.setup_page1()
         self.setup_image_styling_page()
@@ -36,11 +41,6 @@ class MainWindow(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.stacked_widget)
         self.setLayout(main_layout)
-
-        # Initialize the background label to handle background images
-        self.background_label = QLabel(self)
-        self.background_label.setScaledContents(True)  # Ensure the background image scales
-        self.background_label.lower()  # Move background to behind the stacked widget
 
         # Start with the animation page
         self.show_animation_page()
@@ -58,7 +58,8 @@ class MainWindow(QWidget):
         layout = QVBoxLayout(self.animation_page)
 
         # Set a background image for the animation page
-        self.set_background_image("Data/animation_background.jpeg")  # Background for animation page
+        #TODO : change the image...
+        self.set_background_image("Data/black_background.jpeg")  # Background for animation page
 
         # Create a label for the animation text
         self.welcome_label = QLabel("Welcome to NEST", self.animation_page)
@@ -89,7 +90,7 @@ class MainWindow(QWidget):
         self.set_background_image("Data/Wallpaper_2.jpeg")  # Set background for main page
 
     def setup_page1(self):
-        # Set layout for page 1
+        '''Set layout for page 1'''
         self.page1_layout = QVBoxLayout(self.page1)
 
         # Add title label
@@ -140,7 +141,7 @@ class MainWindow(QWidget):
         self.set_background_image("Data/video_styling_background.jpeg")  # Set background for video styling page
 
     def create_styling_boxes(self, parent_layout):
-        # Create a horizontal layout for image and video styling options
+        """Create a horizontal layout for image and video styling options"""
         animation_layout = QHBoxLayout()
 
         animation_style = """
@@ -168,9 +169,10 @@ class MainWindow(QWidget):
         movie.start()
         image_animation.mousePressEvent = self.on_image_styling_click
 
-        image_label = QLabel("Image Styling", self)
-        image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        image_label = QPushButton("Image Styling", self)
+        # image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         image_label.setStyleSheet("background-color: gray; border-radius: 10px;")
+        image_label.clicked.connect(self.on_image_styling_click)
 
         image_layout = QVBoxLayout()
         image_layout.addWidget(image_animation)
@@ -187,9 +189,10 @@ class MainWindow(QWidget):
         v_movie.start()
         video_animation.mousePressEvent = self.on_video_styling_click
 
-        video_label = QLabel("Video Styling", self)
-        video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        video_label = QPushButton("Video Styling", self)
+        # video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         video_label.setStyleSheet("background-color: gray; border-radius: 10px;")
+        video_label.clicked.connect(self.on_video_styling_click)
 
         video_layout = QVBoxLayout()
         video_layout.addWidget(video_animation)
