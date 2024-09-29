@@ -154,6 +154,8 @@ class MainWindow(QWidget):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
+        set_selection_box_ui(is_image_styling = True)
+
     def setup_video_styling_page(self):
         """Set layout for video styling page"""
         
@@ -187,6 +189,8 @@ class MainWindow(QWidget):
         label = QLabel("Video Styling Page", self.video_styling_page)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
+
+        set_selection_box_ui(is_image_styling = False)
 
         
     def on_image_styling_click(self, event):
@@ -290,6 +294,12 @@ class MainWindow(QWidget):
     def show_animation_page(self):
         # Set the initial page to be the animation page
         self.stacked_widget.setCurrentWidget(self.animation_page)
+
+    def set_selection_box_ui(is_image_styling = True):
+        """To set selection UI of art and input image"""
+
+        
+        return
 
 
 # Initialization of application
