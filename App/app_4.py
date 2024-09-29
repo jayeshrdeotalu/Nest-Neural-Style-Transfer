@@ -13,6 +13,9 @@ class MainWindow(QWidget):
         self.setWindowTitle("NEST")
         self.resize(1000, 800)
 
+        self.input_image_path = None
+        self.art_image_path = None
+
         # Create a QStackedWidget to handle multiple pages
         self.stacked_widget = QStackedWidget(self)
 
@@ -126,67 +129,9 @@ class MainWindow(QWidget):
         # Create layout for the image styling page
         layout = QVBoxLayout(self.image_styling_page)
 
-        # Create and style the back button
-        back_button = QPushButton("<")
-        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        back_button.clicked.connect(self.go_to_main_page)
-        layout.addWidget(back_button)
+        self.set_selection_box_ui(layout, True)
 
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: darkgray;  
-                color: white;              
-                border-style: outset;
-                border-width: 2px;
-                border-color: beige;             
-                padding: 10px 20px;         
-                font-size: 16px;            
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: lightgray;  
-            }
-            QPushButton:pressed {
-                background-color: black;
-            }
-        """)
-
-        # Label for the page title
-        label = QLabel("Image Styling Page", self.image_styling_page)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(label)
-
-        # Add the selection UI (art image and input image selection boxes)
-        self.art_label = QLabel("Select art image", self.image_styling_page)
-        self.input_label = QLabel("Select input image", self.image_styling_page)
-
-        self.art_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.art_label.setStyleSheet("border: 2px solid black; padding: 20px;")
-        self.art_label.mousePressEvent = self.select_art_image
-
-        self.input_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.input_label.setStyleSheet("border: 2px solid black; padding: 20px;")
-        self.input_label.mousePressEvent = self.select_input_image
-
-        # Button to process the styling
-        process_button = QPushButton("Process the styling")
-        process_button.setStyleSheet("""
-            QPushButton {
-                background-color: #4CAF50; 
-                color: white; 
-                border-radius: 10px; 
-                padding: 10px;
-                font-size: 16px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-        """)
-
-        # Add widgets to layout
-        layout.addWidget(self.art_label)
-        layout.addWidget(self.input_label)
-        layout.addWidget(process_button)
+        
 
     def select_art_image(self, event):
         # Open file dialog to select image
@@ -220,36 +165,7 @@ class MainWindow(QWidget):
         
         layout = QVBoxLayout(self.video_styling_page)
 
-        back_button = QPushButton("<")
-        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        back_button.clicked.connect(self.go_to_main_page)
-        layout.addWidget(back_button)
-
-        # Set the style of the button
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: darkgray;  
-                color: white;              
-                border-style: outset;
-                border-width: 2px;
-                border-color: beige;             
-                padding: 10px 20px;         
-                font-size: 16px;            
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: lightgray;  
-            }
-            QPushButton:pressed {
-                background-color: lightblack;
-            }
-        """)
-        
-        label = QLabel("Video Styling Page", self.video_styling_page)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(label)
-
-        # set_selection_box_ui(is_image_styling = False)
+        self.set_selection_box_ui(layout, False)
 
         
     def on_image_styling_click(self, event):
@@ -354,8 +270,77 @@ class MainWindow(QWidget):
         # Set the initial page to be the animation page
         self.stacked_widget.setCurrentWidget(self.animation_page)
 
-    def set_selection_box_ui(self, is_image_styling = True):
+    def set_selection_box_ui(self, layout,  is_image_styling = True):
         """To set selection UI of art and input image"""
+
+        back_button = QPushButton("Back")
+        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        back_button.clicked.connect(self.go_to_main_page)
+        layout.addWidget(back_button)
+
+        back_button.setStyleSheet("""
+            QPushButton {
+                background-color: darkgray;  
+                color: white;              
+                border-style: outset;
+                border-width: 2px;
+                border-color: beige;             
+                padding: 10px 20px;         
+                font-size: 16px;            
+                border-radius: 10px;
+            }
+            QPushButton:hover {
+                background-color: lightgray;  
+            }
+            QPushButton:pressed {
+                background-color: black;
+            }
+        """)
+
+        # Label for the page title
+
+        if is_image_styling:
+            label = QLabel("Image Styling Page", self.image_styling_page)
+        else:
+            label = QLabel("Video Styling Page", self.video_styling_page)
+
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(label)
+
+        if is_image_styling:
+            self.input_label = QLabel("Select input image", self.image_styling_page)
+        else:
+            self.input_label = QLabel("Select input video", self.image_styling_page)
+        self.art_label = QLabel("Select art image", self.image_styling_page)
+
+        self.input_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.input_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.input_label.mousePressEvent = self.select_input_image
+
+        self.art_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.art_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.art_label.mousePressEvent = self.select_art_image
+
+        # Button to process the styling
+        process_button = QPushButton("Process the styling")
+        process_button.setStyleSheet("""
+            QPushButton {
+                background-color: #4CAF50; 
+                color: white; 
+                border-radius: 10px; 
+                padding: 10px;
+                font-size: 16px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """)
+
+        # Add widgets to layout
+        layout.addWidget(self.input_label)
+        layout.addWidget(self.art_label)
+        layout.addWidget(process_button)
+
         return
 
 
