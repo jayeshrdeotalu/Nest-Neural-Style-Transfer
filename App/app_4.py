@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QHBoxLay
 from PyQt6.QtGui import QPixmap, QMovie
 from PyQt6.QtCore import QTimer, QPropertyAnimation, pyqtSlot, Qt
 from PyQt6.QtWidgets import QGraphicsOpacityEffect
-
+from PyQt6.QtWidgets import * 
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -123,14 +123,15 @@ class MainWindow(QWidget):
     def setup_image_styling_page(self):
         """Set layout for image styling page"""
         
+        # Create layout for the image styling page
         layout = QVBoxLayout(self.image_styling_page)
 
+        # Create and style the back button
         back_button = QPushButton("<")
         back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         back_button.clicked.connect(self.go_to_main_page)
         layout.addWidget(back_button)
 
-        # Set the style of the button
         back_button.setStyleSheet("""
             QPushButton {
                 background-color: darkgray;  
@@ -146,15 +147,73 @@ class MainWindow(QWidget):
                 background-color: lightgray;  
             }
             QPushButton:pressed {
-                background-color: lightblack;
+                background-color: black;
             }
         """)
 
+        # Label for the page title
         label = QLabel("Image Styling Page", self.image_styling_page)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        set_selection_box_ui(is_image_styling = True)
+        # Add the selection UI (art image and input image selection boxes)
+        self.art_label = QLabel("Select art image", self.image_styling_page)
+        self.input_label = QLabel("Select input image", self.image_styling_page)
+
+        self.art_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.art_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.art_label.mousePressEvent = self.select_art_image
+
+        self.input_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.input_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.input_label.mousePressEvent = self.select_input_image
+
+        # Button to process the styling
+        process_button = QPushButton("Process the styling")
+        process_button.setStyleSheet("""
+            QPushButton {
+                background-color: #4CAF50; 
+                color: white; 
+                border-radius: 10px; 
+                padding: 10px;
+                font-size: 16px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """)
+
+        # Add widgets to layout
+        layout.addWidget(self.art_label)
+        layout.addWidget(self.input_label)
+        layout.addWidget(process_button)
+
+    def select_art_image(self, event):
+        # Open file dialog to select image
+        file_name, _ = QFileDialog.getOpenFileName(self, "Select Art Image", "", "Images (*.png *.xpm *.jpg *.jpeg)")
+        if file_name:
+            self.update_label_with_image(self.art_label, file_name)
+
+    def select_input_image(self, event):
+        # Open file dialog to select image or video
+        file_name, _ = QFileDialog.getOpenFileName(self, "Select Input Image/Video", "", "Images (*.png *.xpm *.jpg *.jpeg);;Videos (*.mp4 *.avi *.mkv)")
+        if file_name:
+            if file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.xpm')):
+                self.update_label_with_image(self.input_label, file_name)
+            else:
+                # Use a placeholder wallpaper for video selection
+                self.set_video_thumbnail(self.input_label)
+
+    def update_label_with_image(self, label, file_name):
+        # Load and set the image as wallpaper for the label
+        pixmap = QPixmap(file_name)
+        label.setPixmap(pixmap.scaled(label.size(), Qt.AspectRatioMode.KeepAspectRatio))
+
+    def set_video_thumbnail(self, label):
+        # Set a placeholder or default thumbnail for video selection
+        placeholder_image = "path/to/video_thumbnail.png"  # Replace with actual path to a video placeholder image
+        pixmap = QPixmap(placeholder_image)
+        label.setPixmap(pixmap.scaled(label.size(), Qt.AspectRatioMode.KeepAspectRatio))
 
     def setup_video_styling_page(self):
         """Set layout for video styling page"""
@@ -190,7 +249,7 @@ class MainWindow(QWidget):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        set_selection_box_ui(is_image_styling = False)
+        # set_selection_box_ui(is_image_styling = False)
 
         
     def on_image_styling_click(self, event):
@@ -295,10 +354,8 @@ class MainWindow(QWidget):
         # Set the initial page to be the animation page
         self.stacked_widget.setCurrentWidget(self.animation_page)
 
-    def set_selection_box_ui(is_image_styling = True):
+    def set_selection_box_ui(self, is_image_styling = True):
         """To set selection UI of art and input image"""
-
-        
         return
 
 
