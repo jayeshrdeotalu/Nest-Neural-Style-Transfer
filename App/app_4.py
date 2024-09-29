@@ -122,9 +122,29 @@ class MainWindow(QWidget):
         layout = QVBoxLayout(self.image_styling_page)
 
         back_button = QPushButton("<")
-        back_button.
+        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         back_button.clicked.connect(self.go_to_main_page)
         layout.addWidget(back_button)
+
+        # Set the style of the button
+        back_button.setStyleSheet("""
+            QPushButton {
+                background-color: darkgray;  
+                color: white;              
+                border-style: outset;
+                border-width: 2px;
+                border-color: beige;             
+                padding: 10px 20px;         
+                font-size: 16px;            
+                border-radius: 10px;
+            }
+            QPushButton:hover {
+                background-color: lightgray;  
+            }
+            QPushButton:pressed {
+                background-color: lightblack;
+            }
+        """)
 
         label = QLabel("Image Styling Page", self.image_styling_page)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -136,8 +156,29 @@ class MainWindow(QWidget):
         layout = QVBoxLayout(self.video_styling_page)
 
         back_button = QPushButton("<")
+        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         back_button.clicked.connect(self.go_to_main_page)
         layout.addWidget(back_button)
+
+        # Set the style of the button
+        back_button.setStyleSheet("""
+            QPushButton {
+                background-color: darkgray;  
+                color: white;              
+                border-style: outset;
+                border-width: 2px;
+                border-color: beige;             
+                padding: 10px 20px;         
+                font-size: 16px;            
+                border-radius: 10px;
+            }
+            QPushButton:hover {
+                background-color: lightgray;  
+            }
+            QPushButton:pressed {
+                background-color: lightblack;
+            }
+        """)
         
         label = QLabel("Video Styling Page", self.video_styling_page)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
