@@ -59,12 +59,12 @@ class MainWindow(QWidget):
 
         # Set a background image for the animation page
         #TODO : change the image...
-        self.set_background_image("Data/black_background.jpeg")  # Background for animation page
+        self.set_background_image("Data/Wallpaper_2.jpeg")  # Background for animation page
 
         # Create a label for the animation text
         self.welcome_label = QLabel("Welcome to NEST", self.animation_page)
         self.welcome_label.setStyleSheet(
-            "QLabel { font-size: 30px; color: black; background-color: white; border-radius: 15px; padding: 20px;}"
+            "QLabel { font-size: 30px; color: white; background-color: black; border-radius: 15px; padding: 20px;}"
         )
         self.welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.welcome_label.resize(300, 100)
@@ -99,11 +99,15 @@ class MainWindow(QWidget):
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setStyleSheet("""
             QLabel {
-                font-size: 24px;
-                color: black;
-                background-color : gray;
-                padding: 10px;
-                border-radius: 10px;
+                font-size: 28px;                           /* Larger font size for the title */
+                color: white;                              /* White text for contrast */
+                background-color: qlineargradient(
+                    spread: pad, x1:0, y1:0, x2:1, y2:1, 
+                    stop: 0 #BA55D3, stop: 1 #FFB6C1);     /* Gradient from medium orchid to light pink */
+                padding: 15px 30px;                        /* Extra padding for a title-like appearance */
+                border-radius: 15px;                       /* Rounded corners matching the button */
+                font-family: 'Segoe UI', sans-serif;       /* Matching font */
+                font-weight: 600;                          /* Semi-bold for emphasis */
             }
         """)
 
@@ -198,8 +202,27 @@ class MainWindow(QWidget):
         animation_layout = QHBoxLayout()
 
         animation_style = """
+        QPushButton {
+            background-color: qlineargradient(
+                spread: pad, x1:0, y1:0, x2:1, y2:1, 
+                stop: 0 #8A2BE2, stop: 1 #FF69B4);  /* Gradient from purple (violet) to pink */
+            color: white;                          /* White text */
+            border-radius: 15px;                   /* Rounded corners */
+            padding: 12px 24px;                    /* Padding for space */
+            font-family: 'Segoe UI', sans-serif;   /* Clean font */
+            font-size: 16px;                       /* Font size */
+            border: none;                          /* No border */
+            font-weight: 600;                      /* Semi-bold font */
+        }
         QPushButton:hover {
-            background-color: #2980b9;
+            background-color: qlineargradient(
+                spread: pad, x1:0, y1:0, x2:1, y2:1, 
+                stop: 0 #9370DB, stop: 1 #FF82AB);  /* Lighter purple to pink on hover */
+        }
+        QPushButton:pressed {
+            background-color: qlineargradient(
+                spread: pad, x1:0, y1:0, x2:1, y2:1, 
+                stop: 0 #6A0DAD, stop: 1 #FF1493);  /* Darker purple to pink when pressed */
         }
 
         QLabel {
@@ -224,7 +247,7 @@ class MainWindow(QWidget):
 
         image_label = QPushButton("Image Styling", self)
         # image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        image_label.setStyleSheet("background-color: gray; border-radius: 10px;")
+        image_label.setStyleSheet(animation_style)
         image_label.clicked.connect(self.on_image_styling_click)
 
         image_layout = QVBoxLayout()
@@ -244,7 +267,7 @@ class MainWindow(QWidget):
 
         video_label = QPushButton("Video Styling", self)
         # video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        video_label.setStyleSheet("background-color: gray; border-radius: 10px;")
+        video_label.setStyleSheet(animation_style)
         video_label.clicked.connect(self.on_video_styling_click)
 
         video_layout = QVBoxLayout()
