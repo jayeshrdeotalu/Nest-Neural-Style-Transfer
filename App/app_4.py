@@ -131,6 +131,8 @@ class MainWindow(QWidget):
         # Create layout for the image styling page
         layout = QVBoxLayout(self.image_styling_page)
 
+        input_box_layout = QHBoxLayout()
+
         back_button = QPushButton("Back")
         back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         back_button.clicked.connect(self.go_to_main_page)
@@ -155,14 +157,7 @@ class MainWindow(QWidget):
             }
         """)
 
-        # Label for the page title
-        label = QLabel("Image Styling Page", self.image_styling_page)
-
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(label)
-
         self.input_image_label = QLabel("Select input image", self.image_styling_page)
-        
         self.art_image_label = QLabel("Select art image", self.image_styling_page)
 
         self.input_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -180,7 +175,7 @@ class MainWindow(QWidget):
                 background-color: #4CAF50; 
                 color: white; 
                 border-radius: 10px; 
-                padding: 10px;
+                padding: 20px;
                 font-size: 16px;
             }
             QPushButton:hover {
@@ -189,14 +184,17 @@ class MainWindow(QWidget):
         """)
 
         # Add widgets to layout
-        layout.addWidget(self.input_image_label)
-        layout.addWidget(self.art_image_label)
+        input_box_layout.addWidget(self.input_image_label)
+        input_box_layout.addWidget(self.art_image_label)
+        layout.addLayout(input_box_layout)
         layout.addWidget(process_button)
 
     def setup_video_styling_page(self):
         """Set layout for video styling page"""
         
         layout = QVBoxLayout(self.video_styling_page)
+
+        input_box_layout = QHBoxLayout()
 
         back_button = QPushButton("Back")
         back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
@@ -221,12 +219,6 @@ class MainWindow(QWidget):
                 background-color: black;
             }
         """)
-
-        # Label for the page title
-        label = QLabel("Video Styling Page", self.video_styling_page)
-
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(label)
 
         self.input_video_label = QLabel("Select input video", self.image_styling_page)
         self.art_video_label = QLabel("Select art image", self.image_styling_page)
@@ -246,7 +238,7 @@ class MainWindow(QWidget):
                 background-color: #4CAF50; 
                 color: white; 
                 border-radius: 10px; 
-                padding: 10px;
+                padding: 20px;
                 font-size: 16px;
             }
             QPushButton:hover {
@@ -255,8 +247,9 @@ class MainWindow(QWidget):
         """)
 
         # Add widgets to layout
-        layout.addWidget(self.input_video_label)
-        layout.addWidget(self.art_video_label)
+        input_box_layout.addWidget(self.input_video_label)
+        input_box_layout.addWidget(self.art_video_label)
+        layout.addLayout(input_box_layout)
         layout.addWidget(process_button)
 
         
