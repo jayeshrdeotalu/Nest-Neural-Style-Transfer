@@ -1,9 +1,11 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QHBoxLayout, QSizePolicy, QStackedWidget, QPushButton
-from PyQt6.QtGui import QPixmap, QMovie
+from PyQt6.QtGui import QPixmap, QMovie, QImage
 from PyQt6.QtCore import QTimer, QPropertyAnimation, pyqtSlot, Qt
 from PyQt6.QtWidgets import QGraphicsOpacityEffect
 from PyQt6.QtWidgets import * 
+
+import cv2
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -129,43 +131,133 @@ class MainWindow(QWidget):
         # Create layout for the image styling page
         layout = QVBoxLayout(self.image_styling_page)
 
-        self.set_selection_box_ui(layout, True)
+        back_button = QPushButton("Back")
+        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        back_button.clicked.connect(self.go_to_main_page)
+        layout.addWidget(back_button)
 
+        back_button.setStyleSheet("""
+            QPushButton {
+                background-color: darkgray;  
+                color: white;              
+                border-style: outset;
+                border-width: 2px;
+                border-color: beige;             
+                padding: 10px 20px;         
+                font-size: 16px;            
+                border-radius: 10px;
+            }
+            QPushButton:hover {
+                background-color: lightgray;  
+            }
+            QPushButton:pressed {
+                background-color: black;
+            }
+        """)
+
+        # Label for the page title
+        label = QLabel("Image Styling Page", self.image_styling_page)
+
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(label)
+
+        self.input_image_label = QLabel("Select input image", self.image_styling_page)
         
+        self.art_image_label = QLabel("Select art image", self.image_styling_page)
 
-    def select_art_image(self, event):
-        # Open file dialog to select image
-        file_name, _ = QFileDialog.getOpenFileName(self, "Select Art Image", "", "Images (*.png *.xpm *.jpg *.jpeg)")
-        if file_name:
-            self.update_label_with_image(self.art_label, file_name)
+        self.input_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.input_image_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.input_image_label.mousePressEvent = lambda x: self.select_input_image(None, True)
 
-    def select_input_image(self, event):
-        # Open file dialog to select image or video
-        file_name, _ = QFileDialog.getOpenFileName(self, "Select Input Image/Video", "", "Images (*.png *.xpm *.jpg *.jpeg);;Videos (*.mp4 *.avi *.mkv)")
-        if file_name:
-            if file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.xpm')):
-                self.update_label_with_image(self.input_label, file_name)
-            else:
-                # Use a placeholder wallpaper for video selection
-                self.set_video_thumbnail(self.input_label)
+        self.art_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.art_image_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.art_image_label.mousePressEvent = lambda x : self.select_art_image(None, True)
 
-    def update_label_with_image(self, label, file_name):
-        # Load and set the image as wallpaper for the label
-        pixmap = QPixmap(file_name)
-        label.setPixmap(pixmap.scaled(label.size(), Qt.AspectRatioMode.KeepAspectRatio))
+        # Button to process the styling
+        process_button = QPushButton("Process the styling")
+        process_button.setStyleSheet("""
+            QPushButton {
+                background-color: #4CAF50; 
+                color: white; 
+                border-radius: 10px; 
+                padding: 10px;
+                font-size: 16px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """)
 
-    def set_video_thumbnail(self, label):
-        # Set a placeholder or default thumbnail for video selection
-        placeholder_image = "path/to/video_thumbnail.png"  # Replace with actual path to a video placeholder image
-        pixmap = QPixmap(placeholder_image)
-        label.setPixmap(pixmap.scaled(label.size(), Qt.AspectRatioMode.KeepAspectRatio))
+        # Add widgets to layout
+        layout.addWidget(self.input_image_label)
+        layout.addWidget(self.art_image_label)
+        layout.addWidget(process_button)
 
     def setup_video_styling_page(self):
         """Set layout for video styling page"""
         
         layout = QVBoxLayout(self.video_styling_page)
 
-        self.set_selection_box_ui(layout, False)
+        back_button = QPushButton("Back")
+        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        back_button.clicked.connect(self.go_to_main_page)
+        layout.addWidget(back_button)
+
+        back_button.setStyleSheet("""
+            QPushButton {
+                background-color: darkgray;  
+                color: white;              
+                border-style: outset;
+                border-width: 2px;
+                border-color: beige;             
+                padding: 10px 20px;         
+                font-size: 16px;            
+                border-radius: 10px;
+            }
+            QPushButton:hover {
+                background-color: lightgray;  
+            }
+            QPushButton:pressed {
+                background-color: black;
+            }
+        """)
+
+        # Label for the page title
+        label = QLabel("Video Styling Page", self.video_styling_page)
+
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(label)
+
+        self.input_video_label = QLabel("Select input video", self.image_styling_page)
+        self.art_video_label = QLabel("Select art image", self.image_styling_page)
+
+        self.input_video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.input_video_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.input_video_label.mousePressEvent = lambda x : self.select_input_image(None, False)
+
+        self.art_video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.art_video_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.art_video_label.mousePressEvent = lambda x : self.select_art_image(None, False)
+
+        # Button to process the styling
+        process_button = QPushButton("Process the styling")
+        process_button.setStyleSheet("""
+            QPushButton {
+                background-color: #4CAF50; 
+                color: white; 
+                border-radius: 10px; 
+                padding: 10px;
+                font-size: 16px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+        """)
+
+        # Add widgets to layout
+        layout.addWidget(self.input_video_label)
+        layout.addWidget(self.art_video_label)
+        layout.addWidget(process_button)
 
         
     def on_image_styling_click(self, event):
@@ -271,77 +363,57 @@ class MainWindow(QWidget):
         self.stacked_widget.setCurrentWidget(self.animation_page)
 
     def set_selection_box_ui(self, layout,  is_image_styling = True):
-        """To set selection UI of art and input image"""
-
-        back_button = QPushButton("Back")
-        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        back_button.clicked.connect(self.go_to_main_page)
-        layout.addWidget(back_button)
-
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: darkgray;  
-                color: white;              
-                border-style: outset;
-                border-width: 2px;
-                border-color: beige;             
-                padding: 10px 20px;         
-                font-size: 16px;            
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: lightgray;  
-            }
-            QPushButton:pressed {
-                background-color: black;
-            }
-        """)
-
-        # Label for the page title
-
-        if is_image_styling:
-            label = QLabel("Image Styling Page", self.image_styling_page)
-        else:
-            label = QLabel("Video Styling Page", self.video_styling_page)
-
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(label)
-
-        if is_image_styling:
-            self.input_label = QLabel("Select input image", self.image_styling_page)
-        else:
-            self.input_label = QLabel("Select input video", self.image_styling_page)
-        self.art_label = QLabel("Select art image", self.image_styling_page)
-
-        self.input_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.input_label.setStyleSheet("border: 2px solid black; padding: 20px;")
-        self.input_label.mousePressEvent = self.select_input_image
-
-        self.art_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.art_label.setStyleSheet("border: 2px solid black; padding: 20px;")
-        self.art_label.mousePressEvent = self.select_art_image
-
-        # Button to process the styling
-        process_button = QPushButton("Process the styling")
-        process_button.setStyleSheet("""
-            QPushButton {
-                background-color: #4CAF50; 
-                color: white; 
-                border-radius: 10px; 
-                padding: 10px;
-                font-size: 16px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-        """)
-
-        # Add widgets to layout
-        layout.addWidget(self.input_label)
-        layout.addWidget(self.art_label)
-        layout.addWidget(process_button)
+        """To set selection UI of art and input image, returns path to art, input."""
 
         return
+    
+    def select_art_image(self, event, is_img_styling):
+        # Open file dialog to select image
+        file_name, _ = QFileDialog.getOpenFileName(self, "Select Art Image", "", "Images (*.png *.xpm *.jpg *.jpeg)")
+        if file_name:
+            if is_img_styling:
+                self.update_label_with_image(self.art_image_label, file_name)
+            else:
+                self.update_label_with_image(self.art_video_label, file_name)
+
+    def select_input_image(self, event, is_img_styling):
+        #TODO : Add error, exception
+        # Open file dialog to select image or video
+        file_name, _ = QFileDialog.getOpenFileName(
+                self,
+                "Select Input Image/Video",
+                "",  # Default directory
+                "Images (*.png *.xpm *.jpg *.jpeg);;Videos (*.mp4 *.avi *.mkv *.mov *.flv *.wmv *.mpeg)"
+            )      
+        if file_name:
+            if file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.xpm')):
+                self.update_label_with_image(self.input_image_label, file_name)
+            else:
+                # Use a placeholder wallpaper for video selection
+                self.set_video_thumbnail(self.input_video_label, file_name)
+
+    def update_label_with_image(self, label, file_name):
+        # Load and set the image as wallpaper for the label
+        pixmap = QPixmap(file_name)
+        label.setPixmap(pixmap.scaled(label.size(), Qt.AspectRatioMode.KeepAspectRatio))
+
+    def set_video_thumbnail(self, label, video_file):
+        # Set a placeholder or default thumbnail for video selection
+        capture = cv2.VideoCapture(video_file)
+        success, frame = capture.read()
+        capture.release()  # Always release the capture when done
+
+        if success:
+            # Convert the frame to a QPixmap
+            height, width, channel = frame.shape
+            bytes_per_line = 3 * width
+            q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format.Format_RGB888)
+            pixmap = QPixmap.fromImage(q_image)
+            
+            # Scale the pixmap to fit the label and set it as the label's pixmap
+            label.setPixmap(pixmap.scaled(label.size(), Qt.AspectRatioMode.KeepAspectRatio))
+        else:
+            print("Error: Could not read frame from video.")
 
 
 # Initialization of application
