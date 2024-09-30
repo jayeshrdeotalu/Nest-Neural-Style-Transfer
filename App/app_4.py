@@ -380,11 +380,11 @@ class MainWindow(QWidget):
         #TODO : Add error, exception
         # Open file dialog to select image or video
         file_name, _ = QFileDialog.getOpenFileName(
-                self,
-                "Select Input Image/Video",
-                "",  # Default directory
-                "Images (*.png *.xpm *.jpg *.jpeg);;Videos (*.mp4 *.avi *.mkv *.mov *.flv *.wmv *.mpeg)"
-            )      
+            self,
+            "Open File",
+            "",
+            "Images and Videos (*.png *.jpg *.jpeg *.bmp *.gif *.mp4 *.avi *.mov *.mkv)"
+        )   
         if file_name:
             if file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.xpm')):
                 self.update_label_with_image(self.input_image_label, file_name)
