@@ -198,6 +198,8 @@ class MainWindow(QWidget):
             }
         """)
 
+        process_button.clicked.connect(lambda x : self.process_nst(is_image_processing = True))
+
         # Add widgets to layout
         input_box_layout.addWidget(self.input_image_label)
         input_box_layout.addWidget(self.art_image_label)
@@ -260,6 +262,8 @@ class MainWindow(QWidget):
                 background-color: #45a049;
             }
         """)
+
+        process_button.clicked.connect(lambda x : self.process_nst(is_image_processing = False))
 
         # Add widgets to layout
         input_box_layout.addWidget(self.input_video_label)
@@ -423,6 +427,8 @@ class MainWindow(QWidget):
         else:
             print("Error: Could not read frame from video.")
 
+    def process_nst(self, is_image_processing):
+        return
 
 # Initialization of application
 app = QApplication(sys.argv)
