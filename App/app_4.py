@@ -17,6 +17,20 @@ class MainWindow(QWidget):
 
         self.input_image_path = None
         self.art_image_path = None
+        
+        self.input_box_style = '''
+        QLabel {
+                border: 4px solid black; 
+                padding: 20px;
+                min-height : 450px;
+                max-height : 450px;
+                min-width : 300px;
+                max-width : 300px;
+                border-color: beige;
+                border-radius: 20px;
+                font: bold 18px;
+            }
+        '''
 
         # Create a QStackedWidget to handle multiple pages
         self.stacked_widget = QStackedWidget(self)
@@ -125,6 +139,7 @@ class MainWindow(QWidget):
         # Create clickable boxes for image and video styling
         self.create_styling_boxes(self.page1_layout)
 
+
     def setup_image_styling_page(self):
         """Set layout for image styling page"""
         
@@ -161,11 +176,11 @@ class MainWindow(QWidget):
         self.art_image_label = QLabel("Select art image", self.image_styling_page)
 
         self.input_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.input_image_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.input_image_label.setStyleSheet(self.input_box_style)
         self.input_image_label.mousePressEvent = lambda x: self.select_input_image(None, True)
 
         self.art_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.art_image_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.art_image_label.setStyleSheet(self.input_box_style)
         self.art_image_label.mousePressEvent = lambda x : self.select_art_image(None, True)
 
         # Button to process the styling
@@ -224,11 +239,11 @@ class MainWindow(QWidget):
         self.art_video_label = QLabel("Select art image", self.image_styling_page)
 
         self.input_video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.input_video_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.input_video_label.setStyleSheet(self.input_box_style)
         self.input_video_label.mousePressEvent = lambda x : self.select_input_image(None, False)
 
         self.art_video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.art_video_label.setStyleSheet("border: 2px solid black; padding: 20px;")
+        self.art_video_label.setStyleSheet(self.input_box_style)
         self.art_video_label.mousePressEvent = lambda x : self.select_art_image(None, False)
 
         # Button to process the styling
