@@ -441,7 +441,7 @@ class MainWindow(QWidget):
         if is_image_processing:
             print("Yet to add...")
         else:
-            vp = Video_Processing(self.art_image_path, self.art_image_path)
+            vp = Video_Processing(self.art_image_path, self.input_video_path)
             vp.process_video()
         return
 

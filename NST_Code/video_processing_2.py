@@ -63,7 +63,7 @@ class Video_Processing:
     frame_width = self.image_read(frame)[0].shape[1]
     frame_height= self.image_read(frame)[0].shape[0]
 
-    output_path =  os.path.dirname(self.video_path) + 'NEST_' + os.path.splitext(os.path.basename(self.video_path))[0] + ".mp4"
+    output_path =  os.path.dirname(self.video_path) + '/NEST_' + os.path.splitext(os.path.basename(self.video_path))[0] + ".mp4"
     print("Output Path : ", output_path)
 
     out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'MJPG'), 10, 

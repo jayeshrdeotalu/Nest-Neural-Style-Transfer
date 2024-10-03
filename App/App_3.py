@@ -67,7 +67,7 @@ class MainWindow(QWidget):
         )
         self.welcome_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.welcome_label.resize(300, 100)
-        layout.addWidget(self.welcome_labimport sysel, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.welcome_label)
 
         # Set up a timer to transition after the animation is done
         QTimer.singleShot(1500, self.fade_out_welcome_message)  # Animation duration
@@ -202,7 +202,7 @@ class MainWindow(QWidget):
 
         # Add animation layout to parent layout
         parent_layout.addLayout(animation_layout)
-        parent_layout.addStrech(2)
+        parent_layout.addStretch(2)
 
     def resizeEvent(self, event):
         # Ensure the background image resizes with the window
