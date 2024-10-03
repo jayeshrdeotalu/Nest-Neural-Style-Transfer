@@ -43,9 +43,11 @@ class Video_Processing:
   def import_art_image(self):
     self.style_im = cv2.imread(self.art_img_path)
     self.style_im = cv2.cvtColor(self.style_im, cv2.COLOR_BGR2RGB)
-    self.style_im.style_ime_im = self.image_read(self.style_im)
+    self.style_im = self.image_read(self.style_im)
 
   def process_video(self):
+
+    self.import_art_image()
 
     cap = cv2.VideoCapture(self.video_path)
 
@@ -55,9 +57,10 @@ class Video_Processing:
     frame_width = self.image_read(frame)[0].shape[1]
     frame_height= self.image_read(frame)[0].shape[0]
 
-    # output_path = 'Output' / os.path.basename(self.video_path)
+    output_path =  os.path.dirname(self.video_path) + 'NEST_' + os.path.basename(self.video_path)
+    print("Output Path : ", output_path)
 
-    out = cv2.VideoWriter('Data/output.mp4', cv2.VideoWriter_fourcc(*'XVID'), 10, 
+    out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'XVID'), 10, 
                           (frame_width,frame_height))
 
     while True:
@@ -73,5 +76,13 @@ class Video_Processing:
 
     cap.release()
     out.release()
+
+
+i_path = 'Data/Wallpaper_3.jpeg'
+v_path = 'content.mp4'
+
+vp = Video_Processing(i_path, v_path)
+vp.process_video()
+
 
 print("Process Complete")
