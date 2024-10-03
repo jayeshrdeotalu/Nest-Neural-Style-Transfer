@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 import PIL
+import os
 
 hub_model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
 
@@ -13,6 +14,7 @@ class Video_Processing:
 
     self.art_img_path = art_img_path
     self.video_path = video_path
+    style_im = None
 
   #read image, convert to tensor, normalize and resize 
   def image_read(self, image):
@@ -39,33 +41,37 @@ class Video_Processing:
     return tensor
 
   def import_art_image(self):
-    style_im = cv2.imread("Data/Wallpaper_3.jpeg")
-    style_im = cv2.cvtColor(style_im, cv2.COLOR_BGR2RGB)
-    style_im = self.image_read(style_im)
+    self.style_im = cv2.imread(self.art_img_path)
+    self.style_im = cv2.cvtColor(self.style_im, cv2.COLOR_BGR2RGB)
+    self.style_im.style_ime_im = self.image_read(self.style_im)
 
-  cap = cv2.VideoCapture("content.mp4")
+  def process_video(self):
+
+    cap = cv2.VideoCapture(self.video_path)
 
 
-  #in order to get the size of width and shape of video, we used first frame of video
-  ret, frame = cap.read()
-  frame_width = image_read(frame)[0].shape[1]
-  frame_height= image_read(frame)[0].shape[0]
-
-  out = cv2.VideoWriter('Data/output.mp4', cv2.VideoWriter_fourcc(*'XVID'), 10, 
-                        (frame_width,frame_height))
-
-  while True:
+    #in order to get the size of width and shape of video, we used first frame of video
     ret, frame = cap.read()
-    if ret == True:
-      frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-      frame = image_read(frame)
-      stylized_frame = hub_model(tf.constant(frame), tf.constant(style_im))[0]
-      image = tensor_toimage(stylized_frame)
-      out.write(image)
-    else:
-      break
+    frame_width = self.image_read(frame)[0].shape[1]
+    frame_height= self.image_read(frame)[0].shape[0]
 
-  cap.release()
-  out.release()
+    # output_path = 'Output' / os.path.basename(self.video_path)
+
+    out = cv2.VideoWriter('Data/output.mp4', cv2.VideoWriter_fourcc(*'XVID'), 10, 
+                          (frame_width,frame_height))
+
+    while True:
+      ret, frame = cap.read()
+      if ret == True:
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = self.image_read(frame)
+        stylized_frame = hub_model(tf.constant(frame), tf.constant(self.style_im))[0]
+        image = self.tensor_toimage(stylized_frame)
+        out.write(image)
+      else:
+        break
+
+    cap.release()
+    out.release()
 
 print("Process Complete")
