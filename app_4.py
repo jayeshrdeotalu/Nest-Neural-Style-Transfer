@@ -44,6 +44,7 @@ class MainWindow(QWidget):
         self.page1 = QWidget()
         self.image_styling_page = QWidget()
         self.video_styling_page = QWidget()
+        self.final_page = QWidget()
 
         # Initialize the background label to handle background images
         self.background_label = QLabel(self)
@@ -54,11 +55,13 @@ class MainWindow(QWidget):
         self.setup_page1()
         self.setup_image_styling_page()
         self.setup_video_styling_page()
+        self.setup_final_page()
 
         self.stacked_widget.addWidget(self.animation_page)
         self.stacked_widget.addWidget(self.page1)
         self.stacked_widget.addWidget(self.image_styling_page)
         self.stacked_widget.addWidget(self.video_styling_page)
+        self.stacked_widget.addWidget(self.final_page)
 
         # Create a layout for the main window
         main_layout = QVBoxLayout(self)
@@ -274,6 +277,9 @@ class MainWindow(QWidget):
         input_box_layout.addWidget(self.art_video_label)
         layout.addLayout(input_box_layout)
         layout.addWidget(process_button)
+
+    def setup_final_page(self):
+        return
 
         
     def on_image_styling_click(self, event):
