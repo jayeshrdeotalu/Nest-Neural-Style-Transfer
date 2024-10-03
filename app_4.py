@@ -21,6 +21,7 @@ class MainWindow(QWidget):
         self.input_image_path = None
         self.art_image_path = None
         self.input_video_path = None
+        self.output_item_path = None
         
         self.input_box_style = '''
         QLabel {
@@ -279,6 +280,40 @@ class MainWindow(QWidget):
         layout.addWidget(process_button)
 
     def setup_final_page(self):
+
+        layout = QVBoxLayout(self.final_page)
+
+        back_button = QPushButton("Back")
+        back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        back_button.clicked.connect(self.go_to_main_page)
+        layout.addWidget(back_button)
+
+        back_button.setStyleSheet("""
+            QPushButton {
+                background-color: darkgray;  
+                color: white;              
+                border-style: outset;
+                border-width: 2px;
+                border-color: beige;             
+                padding: 10px 20px;         
+                font-size: 16px;            
+                border-radius: 10px;
+            }
+            QPushButton:hover {
+                background-color: lightgray;  
+            }
+            QPushButton:pressed {
+                background-color: black;
+            }
+        """)
+
+        self.output_box = QLabel("Output Unit", self.final_page)
+
+        self.output_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.output_box.setStyleSheet(self.input_box_style)
+
+        layout.addWidget(self.output_box)
+
         return
 
         
@@ -448,7 +483,10 @@ class MainWindow(QWidget):
             print("Yet to add...")
         else:
             vp = Video_Processing(self.art_image_path, self.input_video_path)
-            vp.process_video()
+            self.output_item_path = vp.process_video()
+
+        if self.output_item_path:
+            self.stacked_widget.setCurrentWidget(self.final_page)
         return
 
 # Initialization of application

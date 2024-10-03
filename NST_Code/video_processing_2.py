@@ -84,6 +84,7 @@ class Video_Processing:
     out.release()
 
     print("Process Complete")
+    return output_path
 
 
 # i_path = 'Data/Wallpaper_3.jpeg'
