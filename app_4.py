@@ -24,7 +24,7 @@ class MainWindow(QWidget):
         self.input_image_path = None
         self.art_image_path = None
         self.input_video_path = None
-        self.output_file_path = r"/home/om/Desktop/Nest-Neural-Style-Transfer/art_img.jpeg"
+        self.output_file_path = r"/home/om/Desktop/Nest-Neural-Style-Transfer/NEST_content.mp4"
         
         self.input_box_style = '''
         QLabel {
@@ -117,7 +117,7 @@ class MainWindow(QWidget):
 
     def go_to_main_page(self):
         # Remove the animation page and switch to the main menu
-        self.stacked_widget.setCurrentWidget(self.final_page)
+        self.stacked_widget.setCurrentWidget(self.page1)
         self.set_background_image("Data/Wallpaper_2.jpeg")  # Set background for main page
 
     def setup_page1(self):
@@ -313,14 +313,10 @@ class MainWindow(QWidget):
         self.display_widget = QWidget(self)
         self.display_widget.setFixedSize(640, 480)  # Fixed size for the media widget
         self.display_layout = QVBoxLayout(self.display_widget)
-        # layout.addWidget(self.display_widget)
-
-        # # Image Widget (QLabel)
-        # self.image_label = QLabel(self.final_page)
 
         # Video Widget
         self.video_widget = QVideoWidget(self.final_page)
-        self.video_widget.mousePressEvent = self.toggle_fullscreen
+        # self.video_widget.mousePressEvent = self.toggle_fullscreen
         self.display_layout.addWidget(self.video_widget)
 
         # Image Widget (QLabel)
@@ -364,7 +360,7 @@ class MainWindow(QWidget):
         main_menu_button_layout.addWidget(process_button)
         main_menu_button_layout.addStretch()
 
-        process_button.clicked.connect(lambda x : self.process_nst(is_image_processing = False))
+        process_button.clicked.connect(self.go_to_main_page)
 
         # Add widgets to layout
         layout.addLayout(output_label_layout)
@@ -373,14 +369,7 @@ class MainWindow(QWidget):
         # Initially hide video widget
         self.video_widget.hide()
 
-        self.connect_output()
-
-    def toggle_fullscreen(self):
-        if self.video_widget.isFullScreen():
-            self.video_widget.setFullScreen(False)
-        else:
-            self.video_widget.setFullScreen(True)
-        return
+        # self.connect_output()
     
     def show_image(self, image_path):
         # Hide video widget if showing image
