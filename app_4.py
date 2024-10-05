@@ -24,7 +24,7 @@ class MainWindow(QWidget):
         self.input_image_path = None
         self.art_image_path = None
         self.input_video_path = None
-        self.output_file_path = r"/home/om/Desktop/Nest-Neural-Style-Transfer/NEST_content.mp4"
+        self.output_file_path = r"/home/om/Desktop/Nest-Neural-Style-Transfer/art_img.jpeg"
         
         self.input_box_style = '''
         QLabel {
@@ -310,12 +310,24 @@ class MainWindow(QWidget):
             }
         """)
 
-        # Image Widget (QLabel)
-        self.image_label = QLabel(self.final_page)
+        self.display_widget = QWidget(self)
+        self.display_widget.setFixedSize(640, 480)  # Fixed size for the media widget
+        self.display_layout = QVBoxLayout(self.display_widget)
+        # layout.addWidget(self.display_widget)
+
+        # # Image Widget (QLabel)
+        # self.image_label = QLabel(self.final_page)
 
         # Video Widget
         self.video_widget = QVideoWidget(self.final_page)
         self.video_widget.mousePressEvent = self.toggle_fullscreen
+        self.display_layout.addWidget(self.video_widget)
+
+        # Image Widget (QLabel)
+        self.image_label = QLabel(self.display_widget)
+        self.image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)  # Ignore to allow scaling
+        self.image_label.setScaledContents(True)  # Make image scale to fit
+        self.display_layout.addWidget(self.image_label)
 
         # Media Player for video
         self.media_player = QMediaPlayer(self)
@@ -330,12 +342,11 @@ class MainWindow(QWidget):
         self.zoom_slider.setValue(1)
         self.zoom_slider.setTickInterval(1)
         self.zoom_slider.valueChanged.connect(self.zoom_image)
+        layout.addWidget(self.zoom_slider)
 
         output_label_layout = QHBoxLayout()
         output_label_layout.addStretch()
-        output_label_layout.addWidget(self.image_label)
-        output_label_layout.addWidget(self.zoom_slider)
-        output_label_layout.addWidget(self.video_widget)
+        output_label_layout.addWidget(self.display_widget)
         output_label_layout.addStretch()
 
          # Placeholder for image zooming
@@ -368,6 +379,9 @@ class MainWindow(QWidget):
         layout.addLayout(output_label_layout)
         layout.addLayout(main_menu_button_layout)
 
+        # Initially hide video widget
+        self.video_widget.hide()
+
         self.connect_output()
 
     def toggle_fullscreen(self):
@@ -391,14 +405,14 @@ class MainWindow(QWidget):
         return
     
     def play_video(self, video_path):
-        # Hide image widget if showing video
+         # Hide image widget if showing video
         self.image_label.hide()
         self.zoom_slider.hide()
 
         # Show video
         self.video_widget.show()
         
-        # Play video
+        # Play video (convert path to QUrl)
         video_url = QUrl.fromLocalFile(video_path)
         self.media_player.setSource(video_url)
         self.media_player.play()
