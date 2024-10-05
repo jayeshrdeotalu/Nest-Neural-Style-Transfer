@@ -335,15 +335,6 @@ class MainWindow(QWidget):
         self.audio_output = QAudioOutput(self)
         self.media_player.setAudioOutput(self.audio_output)
 
-        # Zoom Slider for image
-        self.zoom_slider = QSlider(Qt.Orientation.Horizontal)
-        self.zoom_slider.setMinimum(1)
-        self.zoom_slider.setMaximum(5)
-        self.zoom_slider.setValue(1)
-        self.zoom_slider.setTickInterval(1)
-        self.zoom_slider.valueChanged.connect(self.zoom_image)
-        layout.addWidget(self.zoom_slider)
-
         output_label_layout = QHBoxLayout()
         output_label_layout.addStretch()
         output_label_layout.addWidget(self.display_widget)
@@ -398,7 +389,6 @@ class MainWindow(QWidget):
 
         # Show image
         self.image_label.show()
-        self.zoom_slider.show()
         self.original_pixmap = QPixmap(image_path)
         self.image_label.setPixmap(self.original_pixmap)
         self.current_pixmap = self.original_pixmap
@@ -407,7 +397,6 @@ class MainWindow(QWidget):
     def play_video(self, video_path):
          # Hide image widget if showing video
         self.image_label.hide()
-        self.zoom_slider.hide()
 
         # Show video
         self.video_widget.show()
@@ -416,16 +405,6 @@ class MainWindow(QWidget):
         video_url = QUrl.fromLocalFile(video_path)
         self.media_player.setSource(video_url)
         self.media_player.play()
-    
-    def zoom_image(self):
-        if self.original_pixmap:
-            scale_factor = self.zoom_slider.value()
-            scaled_pixmap = self.original_pixmap.scaled(
-                self.original_pixmap.width() * scale_factor,
-                self.original_pixmap.height() * scale_factor,
-                Qt.AspectRatioMode.KeepAspectRatio
-            )
-            self.image_label.setPixmap(scaled_pixmap)
 
     
     def on_image_styling_click(self, event):
