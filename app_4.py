@@ -12,6 +12,7 @@ import cv2
 
 #import additional
 from NST_Code.video_processing_2 import Video_Processing
+from NST_Code.image_processing import ImageProcessing
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -24,7 +25,7 @@ class MainWindow(QWidget):
         self.input_image_path = None
         self.art_image_path = None
         self.input_video_path = None
-        self.output_file_path = r"/home/om/Desktop/Nest-Neural-Style-Transfer/NEST_content.mp4"
+        self.output_file_path = None
         
         self.input_box_style = '''
         QLabel {
@@ -559,7 +560,9 @@ class MainWindow(QWidget):
         print("DEBUG: Inside process_nst method...")
 
         if is_image_processing:
-            print("Yet to add...")
+            ip = ImageProcessing(self.art_image_path, self.input_image_path)
+            self.output_file_path = ip.process_image()
+            # print("Yet to add...")
         else:
             vp = Video_Processing(self.art_image_path, self.input_video_path)
             self.output_file_path = vp.process_video()
