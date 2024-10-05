@@ -140,6 +140,16 @@ class MainWindow(QWidget):
         self.stacked_widget.setCurrentWidget(self.page1)
         self.set_background_image("Data/Wallpaper_2.jpeg")  # Set background for main page
 
+    def go_to_previous_page(self):
+        current_index = self.stacked_widget.currentIndex()
+        
+        if current_index > 0:
+            # Go to the previous page
+            self.stacked_widget.setCurrentIndex(current_index - 1)
+        else:
+            # Optional: Handle the case when you are at the first page
+            print("Already on the first page.")
+
     def setup_page1(self):
         '''Set layout for page 1'''
         self.page1_layout = QVBoxLayout(self.page1)
@@ -274,7 +284,7 @@ class MainWindow(QWidget):
 
         back_button = QPushButton("Back")
         back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        back_button.clicked.connect(self.go_to_main_page)
+        back_button.clicked.connect(self.go_to_previous_page)
         layout.addWidget(back_button)
 
         back_button.setStyleSheet(self.back_button_style)
@@ -312,9 +322,9 @@ class MainWindow(QWidget):
         # Button to process the styling
         main_menu_button_layout = QHBoxLayout()
         main_menu_button_layout.addStretch()
-        process_button = QPushButton("Back to main menu")
-        process_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        process_button.setStyleSheet("""
+        main_menu_button = QPushButton("Back to main menu")
+        main_menu_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        main_menu_button.setStyleSheet("""
             QPushButton {
                 background-color: #4CAF50; 
                 color: white; 
@@ -326,10 +336,10 @@ class MainWindow(QWidget):
                 background-color: #45a049;
             }
         """)
-        main_menu_button_layout.addWidget(process_button)
+        main_menu_button_layout.addWidget(main_menu_button)
         main_menu_button_layout.addStretch()
 
-        process_button.clicked.connect(self.go_to_main_page)
+        main_menu_button.clicked.connect(self.go_to_main_page)
 
         # Add widgets to layout
         layout.addLayout(output_label_layout)
