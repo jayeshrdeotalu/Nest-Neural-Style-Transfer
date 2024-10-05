@@ -41,6 +41,25 @@ class MainWindow(QWidget):
             }
         '''
 
+        self.back_button_style = '''
+            QPushButton {
+                background-color: darkgray;  
+                color: white;              
+                border-style: outset;
+                border-width: 2px;
+                border-color: beige;             
+                padding: 10px 20px;         
+                font-size: 16px;            
+                border-radius: 10px;
+            }
+            QPushButton:hover {
+                background-color: lightgray;  
+            }
+            QPushButton:pressed {
+                background-color: black;
+            }
+            '''
+
         # Create a QStackedWidget to handle multiple pages
         self.stacked_widget = QStackedWidget(self)
 
@@ -165,24 +184,7 @@ class MainWindow(QWidget):
         back_button.clicked.connect(self.go_to_main_page)
         layout.addWidget(back_button)
 
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: darkgray;  
-                color: white;              
-                border-style: outset;
-                border-width: 2px;
-                border-color: beige;             
-                padding: 10px 20px;         
-                font-size: 16px;            
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: lightgray;  
-            }
-            QPushButton:pressed {
-                background-color: black;
-            }
-        """)
+        back_button.setStyleSheet(self.back_button_style)
 
         self.input_image_label = QLabel("Select input image", self.image_styling_page)
         self.art_image_label = QLabel("Select art image", self.image_styling_page)
@@ -230,24 +232,7 @@ class MainWindow(QWidget):
         back_button.clicked.connect(self.go_to_main_page)
         layout.addWidget(back_button)
 
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: darkgray;  
-                color: white;              
-                border-style: outset;
-                border-width: 2px;
-                border-color: beige;             
-                padding: 10px 20px;         
-                font-size: 16px;            
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: lightgray;  
-            }
-            QPushButton:pressed {
-                background-color: black;
-            }
-        """)
+        back_button.setStyleSheet(self.back_button_style)
 
         self.input_video_label = QLabel("Select input video", self.image_styling_page)
         self.art_video_label = QLabel("Select art image", self.image_styling_page)
@@ -292,24 +277,7 @@ class MainWindow(QWidget):
         back_button.clicked.connect(self.go_to_main_page)
         layout.addWidget(back_button)
 
-        back_button.setStyleSheet("""
-            QPushButton {
-                background-color: darkgray;  
-                color: white;              
-                border-style: outset;
-                border-width: 2px;
-                border-color: beige;             
-                padding: 10px 20px;         
-                font-size: 16px;            
-                border-radius: 10px;
-            }
-            QPushButton:hover {
-                background-color: lightgray;  
-            }
-            QPushButton:pressed {
-                background-color: black;
-            }
-        """)
+        back_button.setStyleSheet(self.back_button_style)
 
         self.display_widget = QWidget(self)
         self.display_widget.setFixedSize(640, 480)  # Fixed size for the media widget
