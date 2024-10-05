@@ -5,6 +5,7 @@ from PyQt6.QtCore import QTimer, QPropertyAnimation, pyqtSlot, Qt
 from PyQt6.QtWidgets import QGraphicsOpacityEffect
 from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtCore import Qt, QUrl, QSize
 from PyQt6.QtWidgets import * 
 
 import cv2
@@ -23,7 +24,7 @@ class MainWindow(QWidget):
         self.input_image_path = None
         self.art_image_path = None
         self.input_video_path = None
-        self.output_file_path = None
+        self.output_file_path = r"/home/om/Desktop/Nest-Neural-Style-Transfer/NEST_content.mp4"
         
         self.input_box_style = '''
         QLabel {
@@ -310,7 +311,7 @@ class MainWindow(QWidget):
         """)
 
         # Image Widget (QLabel)
-        self.image_label = QLabel(self)
+        self.image_label = QLabel(self.final_page)
 
         # Video Widget
         self.video_widget = QVideoWidget(self.final_page)
@@ -329,11 +330,6 @@ class MainWindow(QWidget):
         self.zoom_slider.setValue(1)
         self.zoom_slider.setTickInterval(1)
         self.zoom_slider.valueChanged.connect(self.zoom_image)
-
-
-        # self.output_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # self.output_label.setStyleSheet(self.input_box_style)
-        # self.output_label.mousePressEvent = lambda x : self.select_input_image(None, False)
 
         output_label_layout = QHBoxLayout()
         output_label_layout.addStretch()
@@ -372,6 +368,8 @@ class MainWindow(QWidget):
         layout.addLayout(output_label_layout)
         layout.addLayout(main_menu_button_layout)
 
+        self.connect_output()
+
     def toggle_fullscreen(self):
         if self.video_widget.isFullScreen():
             self.video_widget.setFullScreen(False)
@@ -383,7 +381,6 @@ class MainWindow(QWidget):
         # Hide video widget if showing image
         self.video_widget.hide()
         self.media_player.stop()
-        self.fullscreen_button.hide()
 
         # Show image
         self.image_label.show()
@@ -400,10 +397,10 @@ class MainWindow(QWidget):
 
         # Show video
         self.video_widget.show()
-        self.fullscreen_button.show()
         
         # Play video
-        self.media_player.setSource(video_path)
+        video_url = QUrl.fromLocalFile(video_path)
+        self.media_player.setSource(video_url)
         self.media_player.play()
     
     def zoom_image(self):
@@ -586,7 +583,22 @@ class MainWindow(QWidget):
             self.output_file_path = vp.process_video()
 
         if self.output_file_path:
+            self.connect_output()
             self.stacked_widget.setCurrentWidget(self.final_page)
+        return
+    
+    def connect_output(self):
+        
+        if not self.output_file_path:
+            return
+        
+        if self.output_file_path:
+            if self.output_file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+                self.show_image(self.output_file_path)
+            elif self.output_file_path.lower().endswith(('.mp4', '.avi')):
+                print("Directing to video play")
+                self.play_video(self.output_file_path)
+
         return
 
 # Initialization of application
