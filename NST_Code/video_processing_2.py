@@ -88,8 +88,8 @@ class Video_Processing:
     return output_path
 
 
-# i_path = 'Data/Wallpaper_3.jpeg'
-# v_path = 'content.mp4'
+# i_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/Data/Paul_Cezanne_22.jpg'
+# v_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/content.mp4'
 
 # vp = Video_Processing(i_path, v_path)
 # vp.process_video()

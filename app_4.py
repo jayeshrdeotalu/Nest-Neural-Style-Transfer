@@ -283,8 +283,6 @@ class MainWindow(QWidget):
 
         layout = QVBoxLayout(self.final_page)
 
-        input_box_layout = QHBoxLayout()
-
         back_button = QPushButton("Back")
         back_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         back_button.clicked.connect(self.go_to_main_page)
@@ -309,16 +307,16 @@ class MainWindow(QWidget):
             }
         """)
 
-        self.output_label = QLabel("Select input video", self.final_page)
-        self.out_2 = QLabel("Select art image", self.final_page)
+        self.output_label = QLabel("Output Display", self.final_page)
 
         self.output_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.output_label.setStyleSheet(self.input_box_style)
         self.output_label.mousePressEvent = lambda x : self.select_input_image(None, False)
 
-        self.out_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.out_2.setStyleSheet(self.input_box_style)
-        self.out_2.mousePressEvent = lambda x : self.select_art_image(None, False)
+        output_label_layout = QHBoxLayout()
+        output_label_layout.addStretch()
+        output_label_layout.addWidget(self.output_label)
+        output_label_layout.addStretch()
 
         # Button to process the styling
         main_menu_button_layout = QHBoxLayout()
@@ -343,9 +341,7 @@ class MainWindow(QWidget):
         process_button.clicked.connect(lambda x : self.process_nst(is_image_processing = False))
 
         # Add widgets to layout
-        input_box_layout.addWidget(self.output_label)
-        input_box_layout.addWidget(self.out_2)
-        layout.addLayout(input_box_layout)
+        layout.addLayout(output_label_layout)
         layout.addLayout(main_menu_button_layout)
 
         
