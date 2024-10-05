@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QHBoxLay
 from PyQt6.QtGui import QPixmap, QMovie, QImage
 from PyQt6.QtCore import QTimer, QPropertyAnimation, pyqtSlot, Qt
 from PyQt6.QtWidgets import QGraphicsOpacityEffect
+from PyQt6.QtMultimediaWidgets import QVideoWidget
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtWidgets import * 
 
 import cv2
@@ -21,7 +23,7 @@ class MainWindow(QWidget):
         self.input_image_path = None
         self.art_image_path = None
         self.input_video_path = None
-        self.output_item_path = None
+        self.output_file_path = None
         
         self.input_box_style = '''
         QLabel {
@@ -307,16 +309,42 @@ class MainWindow(QWidget):
             }
         """)
 
-        self.output_label = QLabel("Output Display", self.final_page)
+        # Image Widget (QLabel)
+        self.image_label = QLabel(self)
 
-        self.output_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.output_label.setStyleSheet(self.input_box_style)
-        self.output_label.mousePressEvent = lambda x : self.select_input_image(None, False)
+        # Video Widget
+        self.video_widget = QVideoWidget(self.final_page)
+        self.video_widget.mousePressEvent = self.toggle_fullscreen
+
+        # Media Player for video
+        self.media_player = QMediaPlayer(self)
+        self.media_player.setVideoOutput(self.video_widget)
+        self.audio_output = QAudioOutput(self)
+        self.media_player.setAudioOutput(self.audio_output)
+
+        # Zoom Slider for image
+        self.zoom_slider = QSlider(Qt.Orientation.Horizontal)
+        self.zoom_slider.setMinimum(1)
+        self.zoom_slider.setMaximum(5)
+        self.zoom_slider.setValue(1)
+        self.zoom_slider.setTickInterval(1)
+        self.zoom_slider.valueChanged.connect(self.zoom_image)
+
+
+        # self.output_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.output_label.setStyleSheet(self.input_box_style)
+        # self.output_label.mousePressEvent = lambda x : self.select_input_image(None, False)
 
         output_label_layout = QHBoxLayout()
         output_label_layout.addStretch()
-        output_label_layout.addWidget(self.output_label)
+        output_label_layout.addWidget(self.image_label)
+        output_label_layout.addWidget(self.zoom_slider)
+        output_label_layout.addWidget(self.video_widget)
         output_label_layout.addStretch()
+
+         # Placeholder for image zooming
+        self.current_pixmap = None
+        self.original_pixmap = None
 
         # Button to process the styling
         main_menu_button_layout = QHBoxLayout()
@@ -344,7 +372,51 @@ class MainWindow(QWidget):
         layout.addLayout(output_label_layout)
         layout.addLayout(main_menu_button_layout)
 
+    def toggle_fullscreen(self):
+        if self.video_widget.isFullScreen():
+            self.video_widget.setFullScreen(False)
+        else:
+            self.video_widget.setFullScreen(True)
+        return
+    
+    def show_image(self, image_path):
+        # Hide video widget if showing image
+        self.video_widget.hide()
+        self.media_player.stop()
+        self.fullscreen_button.hide()
+
+        # Show image
+        self.image_label.show()
+        self.zoom_slider.show()
+        self.original_pixmap = QPixmap(image_path)
+        self.image_label.setPixmap(self.original_pixmap)
+        self.current_pixmap = self.original_pixmap
+        return
+    
+    def play_video(self, video_path):
+        # Hide image widget if showing video
+        self.image_label.hide()
+        self.zoom_slider.hide()
+
+        # Show video
+        self.video_widget.show()
+        self.fullscreen_button.show()
         
+        # Play video
+        self.media_player.setSource(video_path)
+        self.media_player.play()
+    
+    def zoom_image(self):
+        if self.original_pixmap:
+            scale_factor = self.zoom_slider.value()
+            scaled_pixmap = self.original_pixmap.scaled(
+                self.original_pixmap.width() * scale_factor,
+                self.original_pixmap.height() * scale_factor,
+                Qt.AspectRatioMode.KeepAspectRatio
+            )
+            self.image_label.setPixmap(scaled_pixmap)
+
+    
     def on_image_styling_click(self, event):
         self.stacked_widget.setCurrentWidget(self.image_styling_page)
         self.set_background_image("Data/image_styling_background.jpeg")  # Set background for image styling page
@@ -511,9 +583,9 @@ class MainWindow(QWidget):
             print("Yet to add...")
         else:
             vp = Video_Processing(self.art_image_path, self.input_video_path)
-            self.output_item_path = vp.process_video()
+            self.output_file_path = vp.process_video()
 
-        if self.output_item_path:
+        if self.output_file_path:
             self.stacked_widget.setCurrentWidget(self.final_page)
         return
 
