@@ -6,7 +6,8 @@ import cv2
 import PIL
 import os
 
-hub_model = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
+hub_model = hub.load('NST_Model')
+print("Model loaded successfully from the local directory!")
 
 class Video_Processing:
 
@@ -15,7 +16,7 @@ class Video_Processing:
     print("DEBUG: INSIDE INIT")
     self.art_img_path = art_img_path
     self.video_path = video_path
-    style_im = None
+    self.style_im = None
 
   #read image, convert to tensor, normalize and resize 
   def image_read(self, image):
