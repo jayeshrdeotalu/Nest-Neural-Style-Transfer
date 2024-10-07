@@ -534,22 +534,50 @@ class MainWindow(QWidget):
             print("Error: Could not read frame from video.")
 
     def process_nst(self, is_image_processing):
+        # Show loading popup
+        self.show_loading_popup()
 
-        print("DEBUG: Inside process_nst method...")
-
+        # Process the image or video
         if is_image_processing:
             ip = ImageProcessing(self.art_image_path, self.input_image_path)
             self.output_file_path = ip.process_image()
-            # print("Yet to add...")
         else:
             vp = Video_Processing(self.art_image_path, self.input_video_path)
             self.output_file_path = vp.process_video()
 
+        # Close loading popup and continue with the execution
+        self.hide_loading_popup()
+
         if self.output_file_path:
             self.connect_output()
             self.stacked_widget.setCurrentWidget(self.final_page)
-        return
     
+    def show_loading_popup(self):
+        self.loading_dialog = QDialog(self)
+        self.loading_dialog.setWindowTitle("Processing")
+        self.loading_dialog.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        self.loading_dialog.setModal(True)
+
+        layout = QVBoxLayout()
+
+        # Add a label with a message
+        label = QLabel("Image/Video is processing...")
+        layout.addWidget(label)
+
+        # Add a QLabel to display the loading animation
+        movie_label = QLabel()
+        movie = QMovie("Data/loading_gif.gif")  # Replace with the path to your GIF
+        movie_label.setMovie(movie)
+        movie.start()
+        layout.addWidget(movie_label)
+
+        self.loading_dialog.setLayout(layout)
+        self.loading_dialog.show()
+
+    def hide_loading_popup(self):
+        if hasattr(self, 'loading_dialog'):
+            self.loading_dialog.close()
+
     def connect_output(self):
         
         if not self.output_file_path:
