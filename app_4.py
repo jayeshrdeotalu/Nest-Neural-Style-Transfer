@@ -569,7 +569,7 @@ class MainWindow(QWidget):
         self.loading_dialog.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         # self.loading_dialog.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.loading_dialog.setModal(True)
-        self.loading_dialog.setFixedSize(600, 300)  # Set a fixed size for the dialog
+        self.loading_dialog.setFixedSize(600, 300)
 
         # Create a layout and center the content
         layout = QVBoxLayout()
@@ -589,11 +589,6 @@ class MainWindow(QWidget):
         layout.addWidget(movie_label)
 
         self.loading_dialog.setLayout(layout)
-
-        # # Center the dialog on the main window
-        # self.loading_dialog.move(
-        #     self.geometry().center() - self.loading_dialog.rect().center()
-        # )
 
         self.loading_dialog.show()
 
