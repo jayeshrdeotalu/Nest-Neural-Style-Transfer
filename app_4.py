@@ -567,8 +567,9 @@ class MainWindow(QWidget):
 
         self.loading_dialog.setWindowTitle("Processing")
         self.loading_dialog.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        # self.loading_dialog.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.loading_dialog.setModal(True)
-        self.loading_dialog.setFixedSize(300, 150)  # Set a fixed size for the dialog
+        self.loading_dialog.setFixedSize(600, 300)  # Set a fixed size for the dialog
 
         # Create a layout and center the content
         layout = QVBoxLayout()
@@ -581,7 +582,7 @@ class MainWindow(QWidget):
 
         # Add a QLabel to display the loading animation
         movie_label = QLabel()
-        movie = QMovie("Data/loading_gif.gif")  # Replace with the path to your GIF
+        movie = QMovie("Data/loading_gif.gif") 
         movie_label.setMovie(movie)
         movie_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         movie.start()
