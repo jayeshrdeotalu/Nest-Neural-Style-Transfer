@@ -48,48 +48,52 @@ class Video_Processing:
     self.style_im = self.image_read(self.style_im)
 
   def process_video(self):
+      print("DEBUG: Inside process video")
+      self.import_art_image()
 
-    print("DEBUG: Inside process video")
-    self.import_art_image()
-
-    
-    print("DEBUG: img path : ", self.art_img_path)
-    print("DEBUG: video path : ", self.video_path)
-
-    cap = cv2.VideoCapture(self.video_path)
-
-
-    #in order to get the size of width and shape of video, we used first frame of video
-    ret, frame = cap.read()
-    frame_width = self.image_read(frame)[0].shape[1]
-    frame_height= self.image_read(frame)[0].shape[0]
-
-    output_path =  os.path.dirname(self.video_path) + '/NEST_' + os.path.splitext(os.path.basename(self.video_path))[0] + ".mp4"
-    print("Output Path : ", output_path)
-
-    out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'MJPG'), 10, 
-                          (frame_width,frame_height))
-
-    while True:
+      cap = cv2.VideoCapture(self.video_path)
       ret, frame = cap.read()
-      if ret == True:
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame = self.image_read(frame)
-        stylized_frame = hub_model(tf.constant(frame), tf.constant(self.style_im))[0]
-        image = self.tensor_toimage(stylized_frame)
-        out.write(image)
-      else:
-        break
 
-    cap.release()
-    out.release()
+      # Ensure the frame was successfully read
+      if not ret:
+          print("Error reading video frame")
+          return
 
-    print("Process Complete")
-    return output_path
+      frame_width = self.image_read(frame)[0].shape[1]
+      frame_height = self.image_read(frame)[0].shape[0]
+
+      output_path = os.path.dirname(self.video_path) + '/NEST_' + os.path.splitext(os.path.basename(self.video_path))[0] + ".mp4"
+      print("Output Path : ", output_path)
+
+      # Use 'mp4v' codec for mp4 output
+      out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'mp4v'), 10, (frame_width, frame_height))
+
+      while True:
+          ret, frame = cap.read()
+          if ret:
+              frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+              frame = self.image_read(frame)
+
+              stylized_frame = hub_model(tf.constant(frame), tf.constant(self.style_im))[0]
+              image = self.tensor_toimage(stylized_frame)
+
+              # Convert back to BGR for OpenCV and ensure proper frame size
+              image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+              image = cv2.resize(image, (frame_width, frame_height))
+
+              out.write(image)
+          else:
+              break
+
+      cap.release()
+      out.release()
+      print("Process Complete")
+      return output_path
+
 
 
 # i_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/Data/Paul_Cezanne_22.jpg'
-# v_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/content.mp4'
+# v_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/new_V.mp4'
 
 # vp = Video_Processing(i_path, v_path)
 # vp.process_video()
