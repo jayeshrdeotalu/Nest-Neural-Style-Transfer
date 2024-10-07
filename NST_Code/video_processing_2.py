@@ -97,8 +97,8 @@ class Video_Processing:
 
 
 
-i_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/Data/Paul_Cezanne_22.jpg'
-v_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/new_V.mp4'
+# i_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/Data/Paul_Cezanne_22.jpg'
+# v_path = '/home/om/Desktop/Nest-Neural-Style-Transfer/new_V.mp4'
 
-vp = Video_Processing(i_path, v_path)
-vp.process_video()
+# vp = Video_Processing(i_path, v_path)
+# vp.process_video()

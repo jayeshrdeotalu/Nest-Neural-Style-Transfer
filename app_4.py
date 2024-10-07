@@ -122,7 +122,7 @@ class MainWindow(QWidget):
 
         # Set up a timer to transition after the animation is done
         #TODO : Make it 1500 at the time of deployment
-        QTimer.singleShot(2, self.fade_out_welcome_message)  # Animation duration
+        QTimer.singleShot(1400, self.fade_out_welcome_message)  # Animation duration
 
     def fade_out_welcome_message(self):
         # Create a fade-out animation for the welcome label
@@ -445,7 +445,7 @@ class MainWindow(QWidget):
         video_animation = QLabel(self)
         video_animation.setStyleSheet(animation_style)
         video_animation.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        v_movie = QMovie("Data/test_video_annimation_2.gif")
+        v_movie = QMovie("Data/playable_video_112_diff.gif")
         video_animation.setMovie(v_movie)
         video_animation.setScaledContents(True)
         v_movie.start()
