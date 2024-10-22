@@ -62,10 +62,9 @@ class ImageProcessing:
             print("ERROR: Could not load input image.")
             return None
 
-        # Convert the image to RGB (TensorFlow works with RGB)
+        # Convert the image to RGB
         input_image_rgb = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
 
-        # Resize/prepare image if needed (assuming self.image_read handles resizing or preprocessing)
         preprocessed_image = self.image_read(input_image_rgb)[0]
 
         # Add a batch dimension (to make it 4D: [1, height, width, channels])

@@ -132,7 +132,7 @@ class MainWindow(QWidget):
         self.opacity_effect = QGraphicsOpacityEffect()
         self.welcome_label.setGraphicsEffect(self.opacity_effect)
         self.fade_animation = QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.fade_animation.setDuration(1000)  # Duration of the fade effect
+        self.fade_animation.setDuration(1000)
         self.fade_animation.setStartValue(1)
         self.fade_animation.setEndValue(0)
         self.fade_animation.finished.connect(self.go_to_main_page)
@@ -141,7 +141,7 @@ class MainWindow(QWidget):
     def go_to_main_page(self):
         # Remove the animation page and switch to the main menu
         self.stacked_widget.setCurrentWidget(self.page1)
-        self.set_background_image("Data/Wallpaper_2.jpeg")  # Set background for main page
+        self.set_background_image("Data/Wallpaper_2.jpeg")
 
     def go_to_previous_page(self):
         current_index = self.stacked_widget.currentIndex()
@@ -298,7 +298,6 @@ class MainWindow(QWidget):
 
         # Video Widget
         self.video_widget = QVideoWidget(self.final_page)
-        # self.video_widget.mousePressEvent = self.toggle_fullscreen
         self.display_layout.addWidget(self.video_widget)
 
         # Image Widget (QLabel)
@@ -509,7 +508,6 @@ class MainWindow(QWidget):
                 self.input_image_path = file_name
                 self.update_label_with_image(self.input_image_label, file_name)
             else:
-                # Use a placeholder wallpaper for video selection
                 self.input_video_path = file_name
                 self.set_video_thumbnail(self.input_video_label, file_name)
 
@@ -522,7 +520,7 @@ class MainWindow(QWidget):
         # Set a placeholder or default thumbnail for video selection
         capture = cv2.VideoCapture(video_file)
         success, frame = capture.read()
-        capture.release()  # Always release the capture when done
+        capture.release()
 
         if success:
             # Convert the frame to a QPixmap
@@ -607,7 +605,6 @@ class MainWindow(QWidget):
             elif self.output_file_path.lower().endswith(('.mp4', '.avi')):
                 print("Directing to video play")
                 self.play_video(self.output_file_path)
-
         return
 
 # Initialization of application

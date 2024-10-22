@@ -69,7 +69,6 @@ class Video_Processing:
     output_path = os.path.dirname(self.video_path) + '/NEST_' + os.path.splitext(os.path.basename(self.video_path))[0] + ".mp4"
     print("Output Path : ", output_path)
 
-    # Use the original FPS for the output video
     out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame_width, frame_height))
 
     while True:
