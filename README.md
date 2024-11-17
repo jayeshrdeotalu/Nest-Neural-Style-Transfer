@@ -2,6 +2,10 @@
 
 This is a PyQt-based application for performing Neural Style Transfer on images, videos, and live camera feeds. It leverages **TensorFlow Hub** for pre-trained models and **CUDA** for accelerated processing on compatible GPUs.
 
+## Demo 
+
+![Demo GIF](Data/demo.gif)
+
 ## Features
 
 - **Image Styling:** Apply artistic styles to static images.
